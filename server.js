@@ -29,7 +29,7 @@ var server = http.createServer(function (req, res) {
             var user = parts[0];
             var key = user + '!' + lexi.pack(Math.floor(t / 1000));
             db.put(key, doc);
-        });
+        }));
     }
     else if (req.method === 'GET' && parts[1] === 'timeline.json') {
         res.setHeader('content-type', 'application/newline-delimited-json');
@@ -45,3 +45,7 @@ var server = http.createServer(function (req, res) {
     else ecstatic(req, res)
 });
 server.listen(process.env.PORT || 8000);
+
+server.on('listening', function () {
+    console.log('listening on :' + server.address().port);
+});
