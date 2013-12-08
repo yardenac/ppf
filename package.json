@@ -1,0 +1,11 @@
+{
+  "name": "ppf",
+  "version": "0.0.0",
+  "dependencies": {
+    "dehumanize-date": "~1.2.0",
+    "ecstatic": "~0.4.12",
+    "level": "~0.18.0",
+    "lexicographic-integer": "~1.1.0",
+    "through": "~2.3.4"
+  }
+}
