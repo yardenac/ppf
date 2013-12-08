@@ -40,7 +40,14 @@ var server = http.createServer(function (req, res) {
             encoding: 'utf8'
         };
         db.createReadStream(opts).pipe(through(function (row) {
-            this.queue(JSON.stringify(row) + '\n');
+            var sp = row.key.split('!');
+            var doc = {
+                user: sp[0],
+                time: lexi.unpack(sp[1]),
+                timetext: row.value.time,
+                text: row.value.text
+            };
+            this.queue(JSON.stringify(doc) + '\n');
         })).pipe(res);
     }
     else ecstatic(req, res)
