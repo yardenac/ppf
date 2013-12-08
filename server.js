@@ -6,6 +6,7 @@ var qs = require('querystring');
 var dehumanize = require('dehumanize-date');
 var lexi = require('lexicographic-integer');
 var through = require('through');
+var concat = require('concat-stream');
 
 var server = http.createServer(function (req, res) {
     var parts = req.url.split('?')[0].split('/').slice(1)
@@ -27,7 +28,7 @@ var server = http.createServer(function (req, res) {
                 ? new Date : dehumanize(doc.time)
             ;
             var user = parts[0];
-            var key = user + '!' + lexi.pack(Math.floor(t / 1000));
+            var key = user + '!' + lexi.pack(Math.floor(t / 1000), 'hex');
             db.put(key, doc);
         }));
     }
@@ -39,7 +40,7 @@ var server = http.createServer(function (req, res) {
             encoding: 'utf8'
         };
         db.createReadStream(opts).pipe(through(function (row) {
-            this.queue(row + '\n');
+            this.queue(JSON.stringify(row) + '\n');
         })).pipe(res);
     }
     else ecstatic(req, res)
